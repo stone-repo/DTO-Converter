@@ -59,7 +59,11 @@
         },
         "dto-converter.successMessage": {
           "type": "string",
-          "enum": ["statusBar", "information", "disable"],
+          "enum": [
+            "statusBar",
+            "information",
+            "disable"
+          ],
           "default": "statusBar",
           "description": "변환 성공 시 알림 방식: 상태바 메시지, 정보 팝업, 비활성화"
         }
@@ -72,12 +76,13 @@
     "watch": "npm-run-all -p watch:*",
     "watch:esbuild": "node esbuild.js --watch",
     "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
-    "package": "yarn run check-types && yarn run lint && node esbuild.js --production",
+    "package": "yarn run check-types && yarn run lint && yarn run format && yarn run test && node esbuild.js --production",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
+    "format": "prettier --write src",
     "test": "vscode-test",
     "vsix": "yarn run package && vsce package"
   },
@@ -94,6 +99,7 @@
     "esbuild": "^0.25.1",
     "eslint": "^9.23.0",
     "npm-run-all": "^4.1.5",
+    "prettier": "^3.5.3",
     "sinon": "^20.0.0",
     "typescript": "^5.8.2"
   }
