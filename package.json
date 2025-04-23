@@ -2,7 +2,7 @@
   "name": "dto-converter",
   "displayName": "DTO Converter",
   "description": "DTO Converter is a tool for converting data transfer objects (DTOs) between different programming languages.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "publisher": "stone-dev",
   "engines": {
     "vscode": "^1.74.0"
@@ -56,6 +56,12 @@
           "type": "boolean",
           "default": true,
           "description": "자동으로 TypeBox DTO를 Swift Codable로 변환합니다"
+        },
+        "dto-converter.successMessage": {
+          "type": "string",
+          "enum": ["statusBar", "information", "disable"],
+          "default": "statusBar",
+          "description": "변환 성공 시 알림 방식: 상태바 메시지, 정보 팝업, 비활성화"
         }
       }
     }

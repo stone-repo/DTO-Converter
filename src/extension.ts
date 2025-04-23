@@ -39,6 +39,30 @@ export function activate(context: vscode.ExtensionContext) {
 		await vscode.workspace.getConfiguration('dto-converter').update('copyPasteAutoConverter.typeboxToSwift', enabled, true);
 	};
 
+	// 성공 메시지 타입 가져오기
+	const getSuccessMessageType = (): string => {
+		return vscode.workspace.getConfiguration('dto-converter').get('successMessage', 'statusBar');
+	};
+
+	// 성공 메시지 표시 함수
+	const showSuccessMessage = (): void => {
+		const messageType = getSuccessMessageType();
+		
+		switch (messageType) {
+			case 'statusBar':
+				vscode.window.setStatusBarMessage('✅ TypeBox DTO가 Swift 코드로 변환되었습니다', 3000);
+				break;
+			case 'information':
+				vscode.window.showInformationMessage('✅ TypeBox DTO가 Swift 코드로 변환되었습니다');
+				break;
+			case 'disable':
+				// 알림 없음
+				break;
+			default:
+				vscode.window.setStatusBarMessage('✅ TypeBox DTO가 Swift 코드로 변환되었습니다', 3000);
+		}
+	};
+
 	// TypeBox DTO를 Swift로 변환하는 명령어 등록 (선택 후 변환)
 	const convertTypeboxToSwiftCommand = vscode.commands.registerCommand('dto-converter.convertTypeboxToSwift', async () => {
 		const editor = vscode.window.activeTextEditor;
@@ -61,6 +85,14 @@ export function activate(context: vscode.ExtensionContext) {
 		// 선택된 텍스트를 Swift 코드로 대체
 		editor.edit(editBuilder => {
 			editBuilder.replace(selection, swiftCode);
+		}).then(success => {
+			if (success) {
+				// 성공 메시지 표시
+				showSuccessMessage();
+			} else {
+				// 실패 알림 표시
+				vscode.window.showErrorMessage('TypeBox DTO를 Swift 코드로 변환하는 데 실패했습니다');
+			}
 		});
 	});
 
@@ -112,7 +144,7 @@ export function activate(context: vscode.ExtensionContext) {
 					if (success) {
 						console.log('CopyPaste AutoConverter success', success);
 						// 성공 알림 표시 (우측 하단에 작은 알림)
-						vscode.window.setStatusBarMessage('✅ TypeBox DTO가 Swift 코드로 변환되었습니다', 3000);
+						showSuccessMessage();
 					} else {
 						console.error('CopyPaste AutoConverter failed');
 						// 실패 알림 표시
