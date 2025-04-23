@@ -1,0 +1,69 @@
+{
+  "name": "dto-converter",
+  "displayName": "DTO Converter",
+  "description": "DTO Converter is a tool for converting data transfer objects (DTOs) between different programming languages.",
+  "version": "0.0.1",
+  "publisher": "stone-dev",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stone-dev/dto-converter"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:typescript",
+    "onLanguage:swift"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "dto-converter.convertTypeboxToSwift",
+        "title": "DTO: Convert TypeScript/Typebox to Swift Codable"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection && editorLangId == typescript",
+          "command": "dto-converter.convertTypeboxToSwift",
+          "group": "dto"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run package",
+    "compile": "yarn run check-types && yarn run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "yarn run check-types && yarn run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test",
+    "vsix": "yarn run package && vsce package"
+  },
+  "devDependencies": {
+    "@sinclair/typebox": "^0.34.33",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.25.1",
+    "eslint": "^9.23.0",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.2"
+  }
+}
